@@ -70,6 +70,7 @@
 #include "World.h"
 #include "WorldPacket.h"
 #include <cmath>
+#include <valarray>
 
 float baseMoveSpeed[MAX_MOVE_TYPE] =
 {
@@ -855,6 +856,24 @@ uint32 Unit::DealDamage(Unit* attacker, Unit* victim, uint32 damage, CleanDamage
         if (victim->ToPlayer()->GetCommandStatus(CHEAT_GOD))
         {
             return 0;
+        }
+    }
+
+    // Deal more damage and receive less damage from a creature that is 10 level or more below player attacker level
+    if (attacker && victim)
+    {
+        const uint8 LvlDifference = abs(attacker->GetLevel() - victim->GetLevel());
+        constexpr uint8 DamageScale = 35;
+        if (attacker->IsPlayer() && victim->IsCreature() && (LvlDifference >= 10))
+        {
+            LOG_DEBUG("entities.unit", "Creature is {} level below target, doing increased damage to it", LvlDifference);
+            damage *= DamageScale;
+        }
+
+        if (attacker->IsCreature() && victim->IsPlayer() && (LvlDifference >= 10))
+        {
+            LOG_DEBUG("entities.unit", "Creature is {} level below target, receiving decreased damaged from it", LvlDifference);
+            damage /= DamageScale;
         }
     }
 
