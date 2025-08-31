@@ -839,7 +839,7 @@ uint32 Unit::DealDamage(Unit* attacker, Unit* victim, uint32 damage, CleanDamage
     }
 
     // Hook for OnDamage Event
-    sScriptMgr->OnDamage(attacker, victim, damage);
+    //sScriptMgr->OnDamage(attacker, victim, damage);
 
     if (victim->IsPlayer() && attacker != victim)
     {
