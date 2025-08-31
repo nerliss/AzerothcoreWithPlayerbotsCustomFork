@@ -839,7 +839,7 @@ uint32 Unit::DealDamage(Unit* attacker, Unit* victim, uint32 damage, CleanDamage
     }
 
     // Hook for OnDamage Event
-    //sScriptMgr->OnDamage(attacker, victim, damage);
+    sScriptMgr->OnDamage(attacker, victim, damage);
 
     if (victim->IsPlayer() && attacker != victim)
     {
@@ -866,14 +866,14 @@ uint32 Unit::DealDamage(Unit* attacker, Unit* victim, uint32 damage, CleanDamage
         constexpr uint8 DamageScale = 35;
         if (attacker->IsPlayer() && victim->IsCreature() && (LvlDifference >= 10))
         {
-            LOG_DEBUG("entities.unit", "Creature is {} level below target, doing increased damage to it", LvlDifference);
             damage *= DamageScale;
+            LOG_DEBUG("entities.unit", "Creature {} is {} level below target {}, doing increased damage to it ({})", victim->GetName(), LvlDifference, attacker->GetName(), damage);
         }
 
         if (attacker->IsCreature() && victim->IsPlayer() && (LvlDifference >= 10))
         {
-            LOG_DEBUG("entities.unit", "Creature is {} level below target, receiving decreased damaged from it", LvlDifference);
             damage /= DamageScale;
+            LOG_DEBUG("entities.unit", "Creature {} is {} level below target {}, receiving decreased damaged from it ({})", attacker->GetName(), LvlDifference, victim->GetName(), damage);
         }
     }
 
