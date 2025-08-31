@@ -2886,6 +2886,10 @@ public:
 
         playerTarget->CombatStop();
         playerTarget->getHostileRefMgr().deleteReferences();
+
+        constexpr char message[] = "Combat stopped";
+        handler->PSendSysMessage(message);
+
         return true;
     }
 
